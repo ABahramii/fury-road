@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Fury Road</title>
+    <script type="text/javascript" src="lib/three.js"></script>
+    <script type="text/javascript" src="lib/OrbitControls.js"></script>
+    <script type="text/javascript" src="lib/HDRCubeTextureLoader.js"></script>
+    <script type="text/javascript" src="lib/OBJLoader.js"></script>
+    <script type="text/javascript" src="lib/Tween.js"></script>
+    <script type="text/javascript" src="lib/LegacyJSONLoader.js"></script>
+    <script type="text/javascript" src="lib/GLTFLoader.js"></script>
+    <script src="lib/DDSLoader.js"></script>
+    <script src="lib/MTLLoader.js"></script>
+    <script src="lib/OBJLoader.js"></script>
 </head>
 <body>
 <div id="Web_Gl">
@@ -10,7 +20,38 @@
 </div>
 
 <script>
+    let camera , renderer , scene ;
+    let supra ;
+    init();
+    animate();
 
+    function init() {
+        // create scene
+        scene = new THREE.Scene();
+
+        let reflection = new THREE.CubeTextureLoader()
+            .setPath('pic/')
+            .load(['blue2.jpg', 'blue2.jpg', 'blue2.jpg', 'blue2.jpg', 'blue2.jpg', 'blue2.jpg']);
+        reflection.format = THREE.RGBFormat;
+        scene.background = reflection;
+
+        // create camera
+        camera = new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,0.1,100000);
+        camera.position.set(0,0,0);
+        camera.lookAt(scene.position);
+
+        // create render
+        renderer = new THREE.WebGLRenderer({ antialias : true });
+        renderer.setClearColor('#ffffff');
+        renderer.setSize(window.innerWidth,window.innerHeight);
+
+        document.getElementById('Web_Gl').appendChild(renderer.domElement);
+
+    }
+
+    function animate() {
+
+    }
 </script>
 
 </body>
