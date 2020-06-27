@@ -25,19 +25,25 @@
     init();
     animate();
 
+    window.addEventListener('resize', onWindowResize, false);
+
+
     function init() {
         // create scene
         scene = new THREE.Scene();
 
-        let reflection = new THREE.CubeTextureLoader()
+        //create cube box mapping
+        var reflection = new THREE.CubeTextureLoader()
             .setPath('pic/')
-            .load(['blue2.jpg', 'blue2.jpg', 'blue2.jpg', 'blue2.jpg', 'blue2.jpg', 'blue2.jpg']);
+            .load(['wall2.jpg', 'wall2.jpg', 'wall2.jpg', 'wall2.jpg', 'wall2.jpg', 'wall2.jpg']);
         reflection.format = THREE.RGBFormat;
+        reflection.magFilter = THREE.NearestFilter ;
+        reflection.minFilter = THREE.LinearFilter ;
         scene.background = reflection;
 
         // create camera
         camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 100000);
-        camera.position.set(0, 0, 0);
+        camera.position.set(0, 50, 0);
         camera.lookAt(scene.position);
 
         // create render
@@ -47,26 +53,7 @@
 
         document.getElementById('Web_Gl').appendChild(renderer.domElement);
 
-        // plane texture
-        let texturePlane = new THREE.TextureLoader().setPath('pic/').load('blue2.jpg');
 
-        texturePlane.repeat.set(1, 1);
-        texturePlane.wrapS = THREE.RepeatWrapping;
-        texturePlane.wrapT = THREE.RepeatWrapping;
-        texturePlane.magFilter = THREE.NearestFilter;
-        texturePlane.minFilter = THREE.LinearFilter;
-
-        // ToDo: we declare planeGeo and planeMat with const, if you want to change it change "const" to "let"
-        const planeGeo = new THREE.PlaneGeometry(1500000, 150000);
-        const planeMat = new THREE.MeshBasicMaterial({color: 0xcccccc, side: THREE.DoubleSide, map: texturePlane});
-
-        let plane = new THREE.Mesh(planeGeo, planeMat);
-
-        plane.rotateX(Math.PI / 2);
-        plane.position.y = -59;
-        plane.position.z = -300;
-
-        scene.add(plane);
 
         var textureRoad = new THREE.TextureLoader().setPath('pic/').load('myRoad.png');
 
@@ -103,6 +90,12 @@
         // camera.position.z -= 5 ;
         requestAnimationFrame(animate);
         renderer.render(scene,camera);
+    }
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
     }
 </script>
 
