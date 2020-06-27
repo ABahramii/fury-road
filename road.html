@@ -43,7 +43,7 @@
 
         // create camera
         camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 100000);
-        camera.position.set(0, 50, 0);
+        camera.position.set(0, 0, -200);
         camera.lookAt(scene.position);
 
         // create render
@@ -72,16 +72,7 @@
         roadMesh.position.z = -300;
         scene.add(roadMesh);
 
-        gltfloader1 = new THREE.GLTFLoader();
-
-        gltfloader1.setPath('model/truck car').load('scene.gltf' , function (gltf) {
-            supra = gltf.scene;
-            console.log(supra);
-            supra.children[0].children[0].children[0].children[3].visible = false;
-            supra.scale.set(10,10,10);
-            supra.position.set(0,-50,-300);
-            scene.add(supra);
-        });
+    
 
     }
 
