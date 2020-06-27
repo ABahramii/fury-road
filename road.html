@@ -33,7 +33,7 @@
         scene = new THREE.Scene();
 
         //create cube box mapping
-        var reflection = new THREE.CubeTextureLoader()
+        let reflection = new THREE.CubeTextureLoader()
             .setPath('pic/')
             .load(['wall2.jpg', 'wall2.jpg', 'wall2.jpg', 'wall2.jpg', 'wall2.jpg', 'wall2.jpg']);
         reflection.format = THREE.RGBFormat;
@@ -54,8 +54,7 @@
         document.getElementById('Web_Gl').appendChild(renderer.domElement);
 
 
-
-        var textureRoad = new THREE.TextureLoader().setPath('pic/').load('myRoad.png');
+        let textureRoad = new THREE.TextureLoader().setPath('pic/').load('myRoad.png');
 
         textureRoad.repeat.set(1, 500);
         textureRoad.wrapS = THREE.RepeatWrapping;
@@ -64,15 +63,15 @@
         textureRoad.minFilter = THREE.LinearFilter;
 
 
-        var road = new THREE.PlaneGeometry(300, 150000);
-        var roadMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc, side: THREE.DoubleSide, map: textureRoad});
-        var roadMesh = new THREE.Mesh(road, roadMaterial);
+        let road = new THREE.PlaneGeometry(300, 150000);
+        let roadMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc, side: THREE.DoubleSide, map: textureRoad});
+        let roadMesh = new THREE.Mesh(road, roadMaterial);
         roadMesh.rotateX(Math.PI / 2);
         roadMesh.position.y = -49;
         roadMesh.position.z = -300;
         scene.add(roadMesh);
 
-        gltfloader1 = new THREE.GLTFLoader();
+        /*gltfloader1 = new THREE.GLTFLoader();
 
         gltfloader1.setPath('model/truck car').load('scene.gltf' , function (gltf) {
             supra = gltf.scene;
@@ -81,12 +80,12 @@
             supra.scale.set(10,10,10);
             supra.position.set(0,-50,-300);
             scene.add(supra);
-        });
+        });*/
 
     }
 
     function animate() {
-        var t = (Date.now()/1000) ;
+        let t = (Date.now()/1000) ;
         // camera.position.z -= 5 ;
         requestAnimationFrame(animate);
         renderer.render(scene,camera);
