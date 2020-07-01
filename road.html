@@ -80,8 +80,9 @@
         gltfloader1.load('model/truck car/out.glb', function (gltf) {
             truck = gltf.scene;
             console.log(truck);
-            truck.scale.set(18,18,18);
-            truck.position.set(0,-44,0);
+            truck.scale.set(55,55,55);
+            truck.rotateY(Math.PI / 2);
+            truck.position.set(0,-15,0);
             scene.add(truck);
         });
 
