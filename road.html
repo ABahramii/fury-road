@@ -71,17 +71,19 @@
         roadMesh.position.z = -300;
         scene.add(roadMesh);
 
-        /*gltfloader1 = new THREE.GLTFLoader();
+        var gltfloader1 = new THREE.GLTFLoader();
 
-        gltfloader1.setPath('model/truck car').load('scene.gltf' , function (gltf) {
-            supra = gltf.scene;
-            console.log(supra);
-            supra.children[0].children[0].children[0].children[3].visible = false;
-            supra.scale.set(10,10,10);
-            supra.position.set(0,-50,-300);
-            scene.add(supra);
-        });*/
+        gltfloader1.load('model/truck car/out.glb', function (gltf) {
+            truck = gltf.scene;
+            console.log(truck);
+            truck.scale.set(18,18,18);
+            truck.position.set(0,-44,0);
+            scene.add(truck);
+        });
 
+
+        var ambiLight= new THREE.AmbientLight("#fffffff",1);
+        scene.add(ambiLight);
     }
 
     function animate() {
