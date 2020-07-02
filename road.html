@@ -20,11 +20,12 @@
 </div>
 
 <script>
-    let camera , renderer , scene ;
-    let roadMesh , truck;
-    let roadBlock = [1000] , block ;
-    let gltfloader1 ,gltfloader2 ;
-    let group ;
+    let camera, renderer, scene;
+    let roadMesh, truck;
+    let roadBlock = [1000], block;
+    let gltfloader1, gltfloader2;
+    let group;
+
     init();
     animate();
 
@@ -84,28 +85,65 @@
             scene.add(truck);
         });
 
-        group = new THREE.Group();
+        // create random blocks
 
         group = new THREE.Group();
         gltfloader2 = new THREE.GLTFLoader();
         gltfloader2.load('model/road block/road block.glb', function (gltf) {
             block = gltf.scene ;
-            block.rotateY(Math.PI/2);
-            block.scale.set(40,40,40);
-            for( let i=0 ; i<10 ; i++ ){
+            block.rotateY(Math.PI / 2);
+            block.scale.set(40, 40, 40);
+
+            for( let i=0 ; i<10 ; i++ ) {
+                let rand = Math.floor(Math.random() * 6) + 1;
+                let j = i + 1;
 
                 roadBlock[i] = block.clone();
-                if(i%2==0)
-                    roadBlock[i].position.set(95,-35,i*1000);
-                else
-                    roadBlock[i].position.set(-95,-35,i*1000);
-                group.add(roadBlock[i]);
 
+                switch (rand) {
+                    case 1:
+                        roadBlock[j] = block.clone();
+                        roadBlock[i].position.set(95, -35, i * 1000);
+                        roadBlock[j].position.set(0, -35, i * 1000);
+                        group.add(roadBlock[i]);
+                        group.add(roadBlock[j]);
+                        break;
+
+                    case 2:
+                        roadBlock[j] = block.clone();
+                        roadBlock[i].position.set(0, -35, i * 1000);
+                        roadBlock[j].position.set(-95, -35, i * 1000);
+                        group.add(roadBlock[i]);
+                        group.add(roadBlock[j]);
+                        break;
+
+                    case 3:
+                        roadBlock[j] = block.clone();
+                        roadBlock[i].position.set(95, -35, i * 1000);
+                        roadBlock[j].position.set(-95, -35, i * 1000);
+                        group.add(roadBlock[i]);
+                        group.add(roadBlock[j]);
+                        break;
+
+                    case 4:
+                        roadBlock[i].position.set(95, -35, i * 1000);
+                        group.add(roadBlock[i]);
+                        break;
+
+                    case 5:
+                        roadBlock[i].position.set(0, -35, i * 1000);
+                        group.add(roadBlock[i]);
+                        break;
+
+                    case 6:
+                        roadBlock[i].position.set(-95, -35, i * 1000);
+                        group.add(roadBlock[i]);
+                        break;
+                }
             }
+
             scene.add(group);
         });
-
-
 
         // add light
         let ambiLight= new THREE.AmbientLight("#fffffff", 1);
@@ -131,8 +169,6 @@
             camera.position.x -= 3;
             roadMesh.position.x -= 3;
             group.position.x -= 3;
-
-
         }
 
         if (event.keyCode === 39 ) {
@@ -146,9 +182,7 @@
             group.position.x += 3;
         }
 
-
     }
-
 
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
