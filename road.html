@@ -91,14 +91,14 @@
         gltfloader2.load('model/road block/road block.glb', function (gltf) {
             block = gltf.scene ;
             block.rotateY(Math.PI/2);
-            block.scale.set(30,30,30);
+            block.scale.set(40,40,40);
             for( let i=0 ; i<10 ; i++ ){
 
                 roadBlock[i] = block.clone();
                 if(i%2==0)
-                    roadBlock[i].position.set(70,-40,i*1000);
+                    roadBlock[i].position.set(95,-35,i*1000);
                 else
-                    roadBlock[i].position.set(-70,-40,i*1000);
+                    roadBlock[i].position.set(-95,-35,i*1000);
                 group.add(roadBlock[i]);
 
             }
@@ -126,6 +126,7 @@
             if(camera.position.x < -90 ){
                 roadMesh.position.x = -89;
                 camera.position.x = -89 ;
+                group.position.x = -89;
             }
             camera.position.x -= 3;
             roadMesh.position.x -= 3;
@@ -138,6 +139,7 @@
             if(camera.position.x > 90 ){
                 roadMesh.position.x = 89;
                 camera.position.x = 89 ;
+                group.position.x = 89 ;
             }
             camera.position.x += 3;
             roadMesh.position.x += 3;
