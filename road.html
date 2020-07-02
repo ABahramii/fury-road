@@ -28,7 +28,6 @@
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('keydown',onDocumentKeyUp,false);
 
-
     function init() {
         // create scene
         scene = new THREE.Scene();
@@ -49,12 +48,12 @@
 
         // create render
         renderer = new THREE.WebGLRenderer({ antialias : true });
-        renderer.setClearColor('#ffffff');
+        renderer.setClearColor('#fffffff');
         renderer.setSize(window.innerWidth,window.innerHeight);
 
         document.getElementById('Web_Gl').appendChild(renderer.domElement);
 
-
+        // road
         let textureRoad = new THREE.TextureLoader().setPath('pic/').load('myRoad.png');
 
         textureRoad.repeat.set(1, 500);
@@ -62,7 +61,6 @@
         textureRoad.wrapT = THREE.RepeatWrapping;
         textureRoad.magFilter = THREE.NearestFilter;
         textureRoad.minFilter = THREE.LinearFilter;
-
 
         let road = new THREE.PlaneGeometry(300, 150000);
         let roadMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc, side: THREE.DoubleSide, map: textureRoad});
@@ -72,33 +70,72 @@
         roadMesh.position.z = -300;
         scene.add(roadMesh);
 
-
-
-
-        var gltfloader1 = new THREE.GLTFLoader();
+        // insert car 3D model
+        let gltfloader1 = new THREE.GLTFLoader();
         gltfloader1.load('model/truck car/out.glb', function (gltf) {
             truck = gltf.scene;
             console.log(truck);
-            truck.scale.set(55,55,55);
+            truck.scale.set(55, 55, 55);
             truck.rotateY(Math.PI / 2);
-            truck.position.set(0,-10,0);
+            truck.position.set(0, -10, 0);
             scene.add(truck);
         });
 
+        group = new THREE.Group();
 
-        var ambiLight= new THREE.AmbientLight("#fffffff",1);
+        gltfloader2 = new THREE.GLTFLoader();
+        gltfloader2.load('model/road block/road block.glb', function (gltf) {
+            block = gltf.scene ;
+            block.rotateY(Math.PI / 2);
+            block.scale.set(30, 30, 30);
+            for( let i=0 ; i<2 ; i++ ) {
+                roadBlock[i] = block.clone();
+                if(i%2 == 0)
+                    roadBlock[i].position.set(70, -40, i*10);
+                else
+                    roadBlock[i].position.set(-70, -40, i*10);
+
+                group.add(roadBlock[i]);
+            }
+            scene.add(group);
+        });
+
+
+        // add light
+        let ambiLight= new THREE.AmbientLight("#fffffff", 1);
         scene.add(ambiLight);
     }
 
     function animate() {
-        let t = (Date.now()/1000) ;
-        roadMesh.position.z -= 1 ;
+        let t = (Date.now() / 1000) ;
+        roadMesh.position.z -= 8 ;
+
+        group.position.z -= 8 ;
         requestAnimationFrame(animate);
+
         renderer.render(scene,camera);
     }
 
     function onDocumentKeyUp(event) {
+/*
+        if (event.keyCode === 37 ) {
+            if(camera.position.x < -90 ) {
+                roadMesh.position.x = -89;
+                camera.position.x = -89 ;
+            }
+            camera.position.x -= 3;
+            roadMesh.position.x -= 3;
+        }
 
+        if (event.keyCode === 39 ) {
+            if(camera.position.x > 90 ) {
+                roadMesh.position.x = 89;
+                camera.position.x = 89 ;
+            }
+            camera.position.x += 3;
+            roadMesh.position.x += 3;
+        }
+*/
         if (event.keyCode === 37 ) {
             if(camera.position.x < -90 ){
                 roadMesh.position.x = -89;
@@ -106,6 +143,7 @@
             }
             camera.position.x -= 3;
             roadMesh.position.x -= 3;
+            group.position.x -= 3;
         }
 
         if (event.keyCode === 39 ) {
@@ -115,9 +153,8 @@
             }
             camera.position.x += 3;
             roadMesh.position.x += 3;
+            group.position.x += 3;
         }
-
-
     }
 
     function onWindowResize() {
