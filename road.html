@@ -21,7 +21,10 @@
 
 <script>
     let camera , renderer , scene ;
-    let roadMesh ;
+    let roadMesh , truck;
+    let roadBlock = [1000] , block ;
+    let gltfloader1 ,gltfloader2 ;
+    let group ;
     init();
     animate();
 
@@ -71,7 +74,7 @@
         scene.add(roadMesh);
 
         // insert car 3D model
-        let gltfloader1 = new THREE.GLTFLoader();
+        gltfloader1 = new THREE.GLTFLoader();
         gltfloader1.load('model/truck car/out.glb', function (gltf) {
             truck = gltf.scene;
             console.log(truck);
@@ -83,22 +86,25 @@
 
         group = new THREE.Group();
 
+        group = new THREE.Group();
         gltfloader2 = new THREE.GLTFLoader();
         gltfloader2.load('model/road block/road block.glb', function (gltf) {
             block = gltf.scene ;
-            block.rotateY(Math.PI / 2);
-            block.scale.set(30, 30, 30);
-            for( let i=0 ; i<2 ; i++ ) {
-                roadBlock[i] = block.clone();
-                if(i%2 == 0)
-                    roadBlock[i].position.set(70, -40, i*10);
-                else
-                    roadBlock[i].position.set(-70, -40, i*10);
+            block.rotateY(Math.PI/2);
+            block.scale.set(30,30,30);
+            for( let i=0 ; i<10 ; i++ ){
 
+                roadBlock[i] = block.clone();
+                if(i%2==0)
+                    roadBlock[i].position.set(70,-40,i*1000);
+                else
+                    roadBlock[i].position.set(-70,-40,i*1000);
                 group.add(roadBlock[i]);
+
             }
             scene.add(group);
         });
+
 
 
         // add light
@@ -109,33 +115,13 @@
     function animate() {
         let t = (Date.now() / 1000) ;
         roadMesh.position.z -= 8 ;
-
         group.position.z -= 8 ;
         requestAnimationFrame(animate);
-
         renderer.render(scene,camera);
     }
 
     function onDocumentKeyUp(event) {
-/*
-        if (event.keyCode === 37 ) {
-            if(camera.position.x < -90 ) {
-                roadMesh.position.x = -89;
-                camera.position.x = -89 ;
-            }
-            camera.position.x -= 3;
-            roadMesh.position.x -= 3;
-        }
 
-        if (event.keyCode === 39 ) {
-            if(camera.position.x > 90 ) {
-                roadMesh.position.x = 89;
-                camera.position.x = 89 ;
-            }
-            camera.position.x += 3;
-            roadMesh.position.x += 3;
-        }
-*/
         if (event.keyCode === 37 ) {
             if(camera.position.x < -90 ){
                 roadMesh.position.x = -89;
@@ -144,6 +130,8 @@
             camera.position.x -= 3;
             roadMesh.position.x -= 3;
             group.position.x -= 3;
+
+
         }
 
         if (event.keyCode === 39 ) {
@@ -155,7 +143,10 @@
             roadMesh.position.x += 3;
             group.position.x += 3;
         }
+
+
     }
+
 
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
