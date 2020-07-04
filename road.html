@@ -25,6 +25,9 @@
     let roadBlock = [1000], block;
     let gltfloader1, gltfloader2;
     let group;
+    let roadBox = [1000] ;
+    let collidableMeshList = [];
+    let box , box2 , isCollision = 1 ;
 
     init();
     animate();
@@ -74,6 +77,15 @@
         roadMesh.position.z = -300;
         scene.add(roadMesh);
 
+        // box for collision
+        let boxgeo = new THREE.BoxGeometry(50,30,110);
+        let boxmat = new THREE.MeshNormalMaterial({
+            opacity : 0 ,transparent : true
+        })
+        box = new THREE.Mesh(boxgeo,boxmat);
+        box.position.set(0,-10,0);
+        scene.add(box);
+
         // insert car 3D model
         gltfloader1 = new THREE.GLTFLoader();
         gltfloader1.load('model/truck car/out.glb', function (gltf) {
@@ -85,8 +97,11 @@
             scene.add(truck);
         });
 
-        // create random blocks
+        //create box for collision
+        boxgeo2 = new THREE.BoxGeometry(81.5,40,20);
+        box2 = new THREE.Mesh(boxgeo2,boxmat);
 
+        // create random blocks
         group = new THREE.Group();
         gltfloader2 = new THREE.GLTFLoader();
         gltfloader2.load('model/road block/road block.glb', function (gltf) {
@@ -94,50 +109,76 @@
             block.rotateY(Math.PI / 2);
             block.scale.set(40, 40, 40);
 
-            for( let i=0 ; i<10 ; i++ ) {
+            for( let i=0 ; i<100 ; i++ ) {
                 let rand = Math.floor(Math.random() * 6) + 1;
                 let j = i + 1;
 
                 roadBlock[i] = block.clone();
+                roadBox[i] = box2.clone();
+                collidableMeshList.push(roadBox[i]);
 
                 switch (rand) {
                     case 1:
                         roadBlock[j] = block.clone();
+                        roadBox[j] = box2.clone();
+                        collidableMeshList.push(roadBox[j]);
                         roadBlock[i].position.set(95, -35, i * 1000);
                         roadBlock[j].position.set(0, -35, i * 1000);
+                        roadBox[i].position.set(95, -35, i * 1000);
+                        roadBox[j].position.set(0, -35, i * 1000);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
+                        group.add(roadBox[i]);
+                        group.add(roadBox[j]);
                         break;
 
                     case 2:
                         roadBlock[j] = block.clone();
+                        roadBox[j] = box2.clone();
+                        collidableMeshList.push(roadBox[j]);
                         roadBlock[i].position.set(0, -35, i * 1000);
                         roadBlock[j].position.set(-95, -35, i * 1000);
+                        roadBox[i].position.set(0, -35, i * 1000);
+                        roadBox[j].position.set(-95, -35, i * 1000);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
+                        group.add(roadBox[i]);
+                        group.add(roadBox[j]);
                         break;
 
                     case 3:
                         roadBlock[j] = block.clone();
+                        roadBox[j] = box2.clone();
+                        collidableMeshList.push(roadBox[j]);
                         roadBlock[i].position.set(95, -35, i * 1000);
                         roadBlock[j].position.set(-95, -35, i * 1000);
+                        roadBox[i].position.set(95, -35, i * 1000);
+                        roadBox[j].position.set(-95, -35, i * 1000);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
+                        group.add(roadBox[i]);
+                        group.add(roadBox[j]);
                         break;
 
                     case 4:
                         roadBlock[i].position.set(95, -35, i * 1000);
                         group.add(roadBlock[i]);
+                        roadBox[i].position.set(95, -35, i * 1000);
+                        group.add(roadBox[i]);
                         break;
 
                     case 5:
                         roadBlock[i].position.set(0, -35, i * 1000);
                         group.add(roadBlock[i]);
+                        roadBox[i].position.set(0, -35, i * 1000);
+                        group.add(roadBox[i]);
                         break;
 
                     case 6:
                         roadBlock[i].position.set(-95, -35, i * 1000);
                         group.add(roadBlock[i]);
+                        roadBox[i].position.set(-95, -35, i * 1000);
+                        group.add(roadBox[i]);
                         break;
                 }
             }
@@ -151,11 +192,32 @@
     }
 
     function animate() {
-        let t = (Date.now() / 1000) ;
-        roadMesh.position.z -= 8 ;
-        group.position.z -= 8 ;
+
+        update();
+
+        if(isCollision){
+            roadMesh.position.z -= 8 ;
+
+            group.position.z -= 8 ;
+        }
         requestAnimationFrame(animate);
         renderer.render(scene,camera);
+    }
+
+    function update() {
+
+        var originPoint = box.position.clone();
+
+        for (var vertexIndex = 0; vertexIndex < box.geometry.vertices.length; vertexIndex++) {
+            var localVertex = box.geometry.vertices[vertexIndex].clone();
+            var globalVertex = localVertex.applyMatrix4(box.matrix);
+            var directionVector = globalVertex.sub(box.position);
+
+            var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
+            var collisionResults = ray.intersectObjects(collidableMeshList);
+            if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length())
+                isCollision = 0 ;
+        }
     }
 
     function onDocumentKeyUp(event) {
@@ -189,6 +251,7 @@
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
+    
 </script>
 
 </body>
