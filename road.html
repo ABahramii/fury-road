@@ -13,11 +13,20 @@
     <script src="lib/DDSLoader.js"></script>
     <script src="lib/MTLLoader.js"></script>
     <script src="lib/OBJLoader.js"></script>
+    <style>
+        .msg{
+            background: #b63232;
+            color: wheat;
+            height: 50px;
+            text-align: center;
+           font-size: 50px;
+        }
+    </style>
 </head>
 <body>
-<!--<h1 style="color: greenyellow">Hello</h1>-->
-<div id="Web_Gl">
-
+<div id="container">
+    <div id="massage" class="msg"></div>
+    <div id="Web_Gl"></div>
 </div>
 
 <script>
@@ -29,6 +38,7 @@
     let roadBox = [1000] ;
     let collidableMeshList = [];
     let box , box2 , isCollision = 1 ;
+    let point = 10 ;
 
     init();
     animate();
@@ -81,7 +91,7 @@
         // box for collision
         let boxgeo = new THREE.BoxGeometry(50,30,110);
         let boxmat = new THREE.MeshNormalMaterial({
-            opacity : 0.5 ,transparent : true
+            opacity : 0 ,transparent : true
         })
         box = new THREE.Mesh(boxgeo,boxmat);
         box.position.set(0,-10,0);
@@ -199,14 +209,16 @@
         if(isCollision){
             roadMesh.position.z -= 8 ;
             group.position.z -= 8 ;
+            point+=10;
+            let show= "POINT : "+ point +" ";
+            appendText(show);
+        }
+        else if(!isCollision){
+            let show = "********YOUR FINAL POINT IS : "+point+"********";
+            appendText(show);
         }
         requestAnimationFrame(animate);
         renderer.render(scene,camera);
-
-        let div = document.getElementById("Web_Gl");
-        let textNode = document.createElement("h1");
-        textNode.innerHTML = "35";
-        div.appendChild(textNode);
     }
 
 
@@ -226,6 +238,10 @@
                 isCollision = 0 ;
             }
         }
+    }
+
+    function appendText(txt) {
+        document.getElementById('massage').innerText = txt;
     }
 
     function onDocumentKeyUp(event) {
