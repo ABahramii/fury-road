@@ -15,6 +15,7 @@
     <script src="lib/OBJLoader.js"></script>
 </head>
 <body>
+<!--<h1 style="color: greenyellow">Hello</h1>-->
 <div id="Web_Gl">
 
 </div>
@@ -94,7 +95,7 @@
             block.rotateY(Math.PI / 2);
             block.scale.set(40, 40, 40);
 
-            for( let i=0 ; i<10 ; i++ ) {
+            for( let i=0 ; i<100 ; i++ ) {
                 let rand = Math.floor(Math.random() * 6) + 1;
                 let j = i + 1;
 
@@ -103,40 +104,40 @@
                 switch (rand) {
                     case 1:
                         roadBlock[j] = block.clone();
-                        roadBlock[i].position.set(95, -35, i * 1000);
-                        roadBlock[j].position.set(0, -35, i * 1000);
+                        roadBlock[i].position.set(95, -35, i * 1250);
+                        roadBlock[j].position.set(0, -35, i * 1250);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
                         break;
 
                     case 2:
                         roadBlock[j] = block.clone();
-                        roadBlock[i].position.set(0, -35, i * 1000);
-                        roadBlock[j].position.set(-95, -35, i * 1000);
+                        roadBlock[i].position.set(0, -35, i * 1250);
+                        roadBlock[j].position.set(-95, -35, i * 1250);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
                         break;
 
                     case 3:
                         roadBlock[j] = block.clone();
-                        roadBlock[i].position.set(95, -35, i * 1000);
-                        roadBlock[j].position.set(-95, -35, i * 1000);
+                        roadBlock[i].position.set(95, -35, i * 1250);
+                        roadBlock[j].position.set(-95, -35, i * 1250);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
                         break;
 
                     case 4:
-                        roadBlock[i].position.set(95, -35, i * 1000);
+                        roadBlock[i].position.set(95, -35, i * 1250);
                         group.add(roadBlock[i]);
                         break;
 
                     case 5:
-                        roadBlock[i].position.set(0, -35, i * 1000);
+                        roadBlock[i].position.set(0, -35, i * 1250);
                         group.add(roadBlock[i]);
                         break;
 
                     case 6:
-                        roadBlock[i].position.set(-95, -35, i * 1000);
+                        roadBlock[i].position.set(-95, -35, i * 1250);
                         group.add(roadBlock[i]);
                         break;
                 }
@@ -156,6 +157,11 @@
         group.position.z -= 8 ;
         requestAnimationFrame(animate);
         renderer.render(scene,camera);
+
+        let div = document.getElementById("Web_Gl");
+        let textNode = document.createElement("h1");
+        textNode.innerHTML = "35";
+        div.appendChild(textNode);
     }
 
     function onDocumentKeyUp(event) {
