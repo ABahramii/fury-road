@@ -35,10 +35,10 @@
     let roadBlock = [1000], block;
     let gltfloader1, gltfloader2;
     let group;
-    let roadBox = [1000] ;
+    let roadBox = [1000];
     let collidableMeshList = [];
-    let box , box2 , isCollision = 1 ;
-    let point = 10 ;
+    let box , box2 , isCollision = 1;
+    let point = 10;
 
     init();
     animate();
@@ -89,12 +89,12 @@
         scene.add(roadMesh);
 
         // box for collision
-        let boxgeo = new THREE.BoxGeometry(50,30,110);
+        let boxgeo = new THREE.BoxGeometry(50, 30, 110);
         let boxmat = new THREE.MeshNormalMaterial({
-            opacity : 0 ,transparent : true
+            opacity : 0, transparent : true
         })
         box = new THREE.Mesh(boxgeo,boxmat);
-        box.position.set(0,-10,0);
+        box.position.set(0, -10, 0);
         scene.add(box);
 
         // insert car 3D model
@@ -109,7 +109,7 @@
         });
 
         //create box for collision
-        boxgeo2 = new THREE.BoxGeometry(81,40,20);
+        boxgeo2 = new THREE.BoxGeometry(81, 40, 20);
         box2 = new THREE.Mesh(boxgeo2,boxmat);
 
         // create random blocks
@@ -209,8 +209,8 @@
         if(isCollision){
             roadMesh.position.z -= 8 ;
             group.position.z -= 8 ;
-            point+=10;
-            let show= "POINT : "+ point +" ";
+            point += 10;
+            let show= "POINT : " + point + " ";
             appendText(show);
         }
         else if(!isCollision){
@@ -218,21 +218,20 @@
             appendText(show);
         }
         requestAnimationFrame(animate);
-        renderer.render(scene,camera);
+        renderer.render(scene, camera);
     }
-
 
     function update() {
 
-        var originPoint = box.position.clone();
+        let originPoint = box.position.clone();
 
-        for (var vertexIndex = 0; vertexIndex < box.geometry.vertices.length; vertexIndex++) {
-            var localVertex = box.geometry.vertices[vertexIndex].clone();
-            var globalVertex = localVertex.applyMatrix4(box.matrix);
-            var directionVector = globalVertex.sub(box.position);
+        for (let vertexIndex = 0; vertexIndex < box.geometry.vertices.length; vertexIndex++) {
+            let localVertex = box.geometry.vertices[vertexIndex].clone();
+            let globalVertex = localVertex.applyMatrix4(box.matrix);
+            let directionVector = globalVertex.sub(box.position);
 
-            var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
-            var collisionResults = ray.intersectObjects(collidableMeshList);
+            let ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
+            let collisionResults = ray.intersectObjects(collidableMeshList);
             if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()){
                 console.log("1");
                 isCollision = 0 ;
@@ -252,6 +251,7 @@
                 camera.position.x = -89 ;
                 group.position.x = -89;
             }
+
             camera.position.x -= 3;
             roadMesh.position.x -= 3;
             group.position.x -= 3;
