@@ -23,7 +23,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: #b63232">
 <div id="container">
     <div id="massage" class="msg"></div>
     <div id="Web_Gl"></div>
@@ -32,7 +32,7 @@
 <script>
     let camera, renderer, scene;
     let roadMesh, truck;
-    let roadBlock = [2000], block;
+    let roadBlock = [1000], block;
     let gltfloader1, gltfloader2;
     let group;
     let roadBox = [1000];
@@ -253,7 +253,7 @@
     function onDocumentKeyUp(event) {
 
         if (event.keyCode === 37 ) {
-            if(camera.position.x < -90 ){
+            if (camera.position.x < -90 ){
                 roadMesh.position.x = -89;
                 camera.position.x = -89 ;
                 group.position.x = -89;
@@ -265,7 +265,7 @@
         }
 
         if (event.keyCode === 39 ) {
-            if(camera.position.x > 90 ){
+            if (camera.position.x > 90 ){
                 roadMesh.position.x = 89;
                 camera.position.x = 89 ;
                 group.position.x = 89 ;
