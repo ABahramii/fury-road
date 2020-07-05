@@ -19,7 +19,7 @@
             color: wheat;
             height: 50px;
             text-align: center;
-           font-size: 50px;
+            font-size: 50px;
         }
     </style>
 </head>
@@ -32,13 +32,14 @@
 <script>
     let camera, renderer, scene;
     let roadMesh, truck;
-    let roadBlock = [1000], block;
+    let roadBlock = [2000], block;
     let gltfloader1, gltfloader2;
     let group;
     let roadBox = [1000];
     let collidableMeshList = [];
     let box , box2 , isCollision = 1;
     let point = 10;
+    let speed = 8;
 
     init();
     animate();
@@ -92,7 +93,8 @@
         let boxgeo = new THREE.BoxGeometry(50, 30, 110);
         let boxmat = new THREE.MeshNormalMaterial({
             opacity : 0, transparent : true
-        })
+        });
+
         box = new THREE.Mesh(boxgeo,boxmat);
         box.position.set(0, -10, 0);
         scene.add(box);
@@ -120,7 +122,7 @@
             block.rotateY(Math.PI / 2);
             block.scale.set(40, 40, 40);
 
-            for( let i=0 ; i<100 ; i++ ) {
+            for( let i=0 ; i<300 ; i++ ) {
                 let rand = Math.floor(Math.random() * 6) + 1;
                 let j = i + 1;
 
@@ -133,10 +135,10 @@
                         roadBlock[j] = block.clone();
                         roadBox[j] = box2.clone();
                         collidableMeshList.push(roadBox[j]);
-                        roadBlock[i].position.set(95, -35, i * 1000);
-                        roadBlock[j].position.set(0, -35, i * 1000);
-                        roadBox[i].position.set(95, -35, i * 1000);
-                        roadBox[j].position.set(0, -35, i * 1000);
+                        roadBlock[i].position.set(95, -35, i * 1250);
+                        roadBlock[j].position.set(0, -35, i * 1250);
+                        roadBox[i].position.set(95, -35, i * 1250);
+                        roadBox[j].position.set(0, -35, i * 1250);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
                         group.add(roadBox[i]);
@@ -147,10 +149,10 @@
                         roadBlock[j] = block.clone();
                         roadBox[j] = box2.clone();
                         collidableMeshList.push(roadBox[j]);
-                        roadBlock[i].position.set(0, -35, i * 1000);
-                        roadBlock[j].position.set(-95, -35, i * 1000);
-                        roadBox[i].position.set(0, -35, i * 1000);
-                        roadBox[j].position.set(-95, -35, i * 1000);
+                        roadBlock[i].position.set(0, -35, i * 1250);
+                        roadBlock[j].position.set(-95, -35, i * 1250);
+                        roadBox[i].position.set(0, -35, i * 1250);
+                        roadBox[j].position.set(-95, -35, i * 1250);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
                         group.add(roadBox[i]);
@@ -161,10 +163,10 @@
                         roadBlock[j] = block.clone();
                         roadBox[j] = box2.clone();
                         collidableMeshList.push(roadBox[j]);
-                        roadBlock[i].position.set(95, -35, i * 1000);
-                        roadBlock[j].position.set(-95, -35, i * 1000);
-                        roadBox[i].position.set(95, -35, i * 1000);
-                        roadBox[j].position.set(-95, -35, i * 1000);
+                        roadBlock[i].position.set(95, -35, i * 1250);
+                        roadBlock[j].position.set(-95, -35, i * 1250);
+                        roadBox[i].position.set(95, -35, i * 1250);
+                        roadBox[j].position.set(-95, -35, i * 1250);
                         group.add(roadBlock[i]);
                         group.add(roadBlock[j]);
                         group.add(roadBox[i]);
@@ -172,23 +174,23 @@
                         break;
 
                     case 4:
-                        roadBlock[i].position.set(95, -35, i * 1000);
+                        roadBlock[i].position.set(95, -35, i * 1250);
                         group.add(roadBlock[i]);
-                        roadBox[i].position.set(95, -35, i * 1000);
+                        roadBox[i].position.set(95, -35, i * 1250);
                         group.add(roadBox[i]);
                         break;
 
                     case 5:
-                        roadBlock[i].position.set(0, -35, i * 1000);
+                        roadBlock[i].position.set(0, -35, i * 1250);
                         group.add(roadBlock[i]);
-                        roadBox[i].position.set(0, -35, i * 1000);
+                        roadBox[i].position.set(0, -35, i * 1250);
                         group.add(roadBox[i]);
                         break;
 
                     case 6:
-                        roadBlock[i].position.set(-95, -35, i * 1000);
+                        roadBlock[i].position.set(-95, -35, i * 1250);
                         group.add(roadBlock[i]);
-                        roadBox[i].position.set(-95, -35, i * 1000);
+                        roadBox[i].position.set(-95, -35, i * 1250);
                         group.add(roadBox[i]);
                         break;
                 }
@@ -206,17 +208,22 @@
 
         update();
 
-        if(isCollision){
-            roadMesh.position.z -= 8 ;
-            group.position.z -= 8 ;
+        if (isCollision){
+            roadMesh.position.z -= speed ;
+            group.position.z -= speed ;
             point += 10;
             let show= "POINT : " + point + " ";
             appendText(show);
         }
-        else if(!isCollision){
-            let show = "********YOUR FINAL POINT IS : "+point+"********";
+        else {
+            let show = "******** YOUR FINAL POINT IS : " + point + " ********";
             appendText(show);
         }
+
+        if (point % 10000 === 0)
+            speed++;
+
+
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     }
